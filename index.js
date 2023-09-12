@@ -28,7 +28,7 @@ app.use(
 );
 
 const corsOptions = {
-  origin: process.env.CORE_URL, // Change this to match your React frontend URL
+  origin: [process.env.CORE_URL,"https://bloggy-mu.vercel.app"], // Change this to match your React frontend URL
   credentials: true,
 };
 app.use(cors(corsOptions));
