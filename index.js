@@ -5,34 +5,40 @@ const userRoutes = require("./routes/users");
 const blogRoutes = require("./routes/blog");
 const followRoutes = require("./routes/follow");
 const db = require("./config/db");
-const cors = require("cors"); // for enabling calls any network
+const cors = require("cors");
 require("dotenv").config();
 const app = express();
 
 const PORT = process.env.PORT || 8100;
 
 app.use(express.json());
-//Store for MongoDb session
+
+// Store for MongoDB session
 const store = new MongoDBStore({
   uri: process.env.MONGOURL,
-  collection: "session",
+  collection: "sessions",
 });
-//using the session middleware
+
+// Using the session middleware
 app.use(
   session({
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
     store: store,
-  }),
+  })
 );
 
+// CORS options
 const corsOptions = {
   origin: process.env.CORE_URL, // Change this to match your React frontend URL
   credentials: true,
 };
+
+// Adding CORS middleware
 app.use(cors(corsOptions));
-//Adding All Routes from routes folder
+
+// Adding All Routes from routes folder
 app.use("/user", userRoutes);
 app.use("/blog", blogRoutes);
 app.use("/follow", followRoutes);
