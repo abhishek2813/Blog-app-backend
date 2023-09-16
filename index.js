@@ -12,6 +12,12 @@ const app = express();
 const PORT = process.env.PORT || 8100;
 
 app.use(express.json());
+const corsOptions = {
+  origin: process.env.CORE_URL, // Change this to match your React frontend URL
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 //Store for MongoDb session
 const store = new MongoDBStore({
   uri: process.env.MONGOURL,
@@ -21,17 +27,14 @@ const store = new MongoDBStore({
 app.use(
   session({
     secret: process.env.SECRET_KEY,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+    },
     resave: false,
     saveUninitialized: false,
     store: store,
   }),
 );
-
-const corsOptions = {
-  origin: [process.env.CORE_URL], // Change this to match your React frontend URL
-  credentials: true,
-};
-app.use(cors(corsOptions));
 //Adding All Routes from routes folder
 app.use("/user", userRoutes);
 app.use("/blog", blogRoutes);
