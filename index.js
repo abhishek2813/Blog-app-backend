@@ -12,12 +12,6 @@ const app = express();
 const PORT = process.env.PORT || 8100;
 
 app.use(express.json());
-const corsOptions = {
-  origin: process.env.CORE_URL, // Change this to match your React frontend URL
-  credentials: true,
-};
-app.use(cors(corsOptions));
-
 //Store for MongoDb session
 const store = new MongoDBStore({
   uri: process.env.MONGOURL,
@@ -35,6 +29,13 @@ app.use(
     store: store,
   }),
 );
+
+const corsOptions = {
+  origin: ["https://bloggy-git-main-abhishek2813.vercel.app","https://bloggy-abhishek2813.vercel.app",process.env.CORE_URL,"https://bloggy-mu.vercel.app/"], // 
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 //Adding All Routes from routes folder
 app.use("/user", userRoutes);
 app.use("/blog", blogRoutes);
